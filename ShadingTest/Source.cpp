@@ -4,22 +4,22 @@
 
 static int p_id = -1;
 
-static const char*vsource =
+static const char* vsource =
 "in vec4 myVertex;"
 "in vec4 color;"
 
-"out vec4 colorV;"
+"out vec4 fcolor;"
 "void main (void)"
 "{ "
-" colorV = color;"
+" fcolor = color;"
 " gl_Position = myVertex; "
 "}";
 
-static const char*fsource =
-"in vec4 color;"
+static const char* fsource =
+"in vec4 fcolor;"
 "void main (void) "
 "{"
-" gl_FragColor = color;"
+" gl_FragColor = fcolor;"
 "}";
 
 void Error(const char* err)
@@ -28,6 +28,7 @@ void Error(const char* err)
 		printf("%s\n", err);
 }
 
+// Compile Shader //
 static void CompileShader(GLuint id)
 {
 	GLint status;
@@ -43,6 +44,7 @@ static void CompileShader(GLuint id)
 	}
 }
 
+// Link Shader //
 static void LinkProgram(GLuint id)
 {
 	GLint status;
@@ -99,6 +101,7 @@ static void Init()
 		fprintf(stderr, "GLEW Error: %s\n", glewGetErrorString(err));
 		exit(!1);
 	}
+
 	// init OpenGL state
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 	glEnable(GL_DEPTH_TEST);
@@ -128,8 +131,8 @@ static void DrawScene()
 
 	glUseProgram(p_id);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, coord);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, color);
 	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0, color);
 	glEnableVertexAttribArray(1);
 	glDrawArrays(GL_TRIANGLES, 0, 3);
 }
